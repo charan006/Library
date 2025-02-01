@@ -61,7 +61,7 @@ public class BookService {
             return new ResponseEntity<>("Bad Request", HttpStatus.BAD_REQUEST);
         }
 
-        //Check if same book exists
+        //Check if same book exists in db
         Optional<Book> existingBook = bookDao.findByTitle(book.getTitle());
         if (existingBook.isPresent()) {
             return new ResponseEntity<>("Book with this title already exists", HttpStatus.CONFLICT);
