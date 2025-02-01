@@ -23,7 +23,7 @@ public class UsersService {
 
     public ResponseEntity<String> createUser(User user) {
 
-        //Check if same email address exists
+        //Check if same email address exists in db
         Optional<User> existingUser = usersDao.findByEmail(user.getEmail());
         if (existingUser.isPresent()) {
             return new ResponseEntity<>("User with this email address already exists", HttpStatus.CONFLICT);
