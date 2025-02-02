@@ -7,26 +7,16 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@FeignClient(name="USER-SERVICE")
+@FeignClient("USER-SERVICE")
 public interface UserFeign {
 
-    @GetMapping("getAllUsers")
+    @GetMapping("user/getAllUsers")
     public ResponseEntity<List<User>> getAllUsers();
 
-    @PostMapping("createUser")
-    public ResponseEntity<String> createUser(@RequestBody User user);
-
-    @GetMapping("getUsers")
+    @GetMapping("user/getUsers")
     public ResponseEntity<List<User>> getUsersList(@RequestBody List<Integer> id);
 
-    @GetMapping("getUser/{id}")
+    @GetMapping("user/getUser/{id}")
     public ResponseEntity<User> getUserWithId(@PathVariable int id);
-
-    @PutMapping("updateUser")
-    public ResponseEntity<String> updateUser(@RequestBody User user);
-
-    @DeleteMapping("deleteUser/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable int id);
-
 
 }

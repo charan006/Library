@@ -3,6 +3,7 @@ package com.library.library_transaction_service.model;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 public class LibraryTransaction {
@@ -11,13 +12,12 @@ public class LibraryTransaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne
-    @JoinColumn(name="user_id", nullable = false)
-    private Book book;
 
-    @ManyToOne
-    @JoinColumn(name="user_id", nullable = false)
-    private User user;
+    @Column(nullable = false)
+    private int book_id;
+
+    @Column(nullable = false)
+    private int user_id;
 
     @Column(nullable = false)
     private LocalDate issueDate;
@@ -28,6 +28,15 @@ public class LibraryTransaction {
     public LibraryTransaction() {
     }
 
+    public LibraryTransaction(String transactionStatus, LocalDate returnDate, LocalDate issueDate, int user_id, int book_id, int id) {
+        this.transactionStatus = transactionStatus;
+        this.returnDate = returnDate;
+        this.issueDate = issueDate;
+        this.user_id = user_id;
+        this.book_id = book_id;
+        this.id = id;
+    }
+
     public int getId() {
         return id;
     }
@@ -36,21 +45,23 @@ public class LibraryTransaction {
         this.id = id;
     }
 
-    public Book getBook() {
-        return book;
+    public int getBook_id() {
+        return book_id;
     }
 
-    public void setBook(Book book) {
-        this.book = book;
+    public void setBook_id(int book_id) {
+        this.book_id = book_id;
     }
 
-    public User getUser() {
-        return user;
+    public int getUser_id() {
+        return user_id;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser_id(int user_id) {
+        this.user_id = user_id;
     }
+
+
 
     public LocalDate getIssueDate() {
         return issueDate;
@@ -80,8 +91,8 @@ public class LibraryTransaction {
     public String toString() {
         return "LibraryTransaction{" +
                 "id=" + id +
-                ", book=" + book +
-                ", user=" + user +
+                ", book_ids=" + book_id +
+                ", user_id=" + user_id +
                 ", issueDate=" + issueDate +
                 ", returnDate=" + returnDate +
                 ", transactionStatus='" + transactionStatus + '\'' +

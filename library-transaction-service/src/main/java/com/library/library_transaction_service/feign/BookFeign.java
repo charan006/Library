@@ -7,26 +7,19 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@FeignClient(name = "BOOK-SERVICE")
+@FeignClient("BOOK-SERVICE")
 public interface BookFeign {
 
-    @GetMapping("getAllBooks")
+    @GetMapping("book/getAllBooks")
     public ResponseEntity<List<Book>> getAllBooks();
 
-    @PostMapping("createBook")
-    public ResponseEntity<String> createBook(@RequestBody Book book);
-
-    @GetMapping("getBook/{id}")
+    @GetMapping("book/getBook/{id}")
     public ResponseEntity<Book> getBook(@PathVariable int id);
 
-    @GetMapping("getBooks")
+    @GetMapping("book/getBooks")
     public ResponseEntity<List<Book>> getBooks(@RequestBody List<Integer> listOfId);
 
-    @PutMapping("updateBook")
+    @PutMapping("book/updateBook")
     public ResponseEntity<String> updateBook(@RequestBody Book book);
-
-    @DeleteMapping("deleteBook/{id}")
-    public ResponseEntity<String> deleteBook(@PathVariable int id);
-
 
 }
