@@ -1,6 +1,7 @@
 package com.library.library_transaction_service.controller;
 
 import com.library.library_transaction_service.model.LibraryTransaction;
+import com.library.library_transaction_service.model.ReturnDto;
 import com.library.library_transaction_service.model.TransactionDto;
 import com.library.library_transaction_service.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,5 +27,9 @@ public class TransactionController {
         return transactionService.borrowBook(request);
     }
 
+    @PostMapping("returnBook")
+    public ResponseEntity<String> returnBook(@RequestBody ReturnDto request){
+        return transactionService.returnBook(request);
+    }
 
 }

@@ -4,6 +4,7 @@ import com.library.library_transaction_service.dao.TransactionDao;
 import com.library.library_transaction_service.feign.BookFeign;
 import com.library.library_transaction_service.model.Book;
 import com.library.library_transaction_service.model.LibraryTransaction;
+import com.library.library_transaction_service.model.ReturnDto;
 import com.library.library_transaction_service.model.TransactionDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,9 +24,7 @@ public class TransactionService {
     BookFeign bookFeign;
 
     public ResponseEntity<List<LibraryTransaction>> getAllTransactions() {
-
         return new ResponseEntity<>(transactionDao.findAll(), HttpStatus.OK);
-
     }
 
 
@@ -65,5 +64,38 @@ public class TransactionService {
         } catch (Exception e) {
             return new ResponseEntity<>("Something went wrong.. Exception Details --> "+ e,HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    public ResponseEntity<String> returnBook(ReturnDto request) {
+
+        //update the transaction status
+        LibraryTransaction libraryTransaction = transactionDao.findById(request.getId()).get();
+        if(libraryTransaction == null){
+            return new ResponseEntity<>("BAD Request - Transaction Not found",HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        libraryTransaction.setReturnDate(request.getReturnDate());
+        libraryTransaction.setTransactionStatus("RETURNED");
+
+        // updating available copies bookService
+        try {
+
+            if(bookFeign.getBook(request.getBookId()).getBody() == null){
+                return new ResponseEntity<>("BAD Request - Book Not found",HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+
+            Book book = bookFeign.getBook(request.getBookId()).getBody() ;
+
+            //Update available copies in book Service
+            book.setAvailableCopies(book.getAvailableCopies()+1);
+            bookFeign.updateBook(book);
+
+            transactionDao.save(libraryTransaction);
+
+            return ResponseEntity.ok("SUCCESS");
+
+        } catch (Exception e) {
+            return new ResponseEntity<>("Something went wrong.. Exception Details --> "+ e,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
 }
